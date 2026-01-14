@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧧 Hái Lộc Đầu Năm - Minigame Tết 2026</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* ========================================
+           CSS RESET & BIẾN TOÀN CỤC
+           ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Tông màu chủ đạo Tết */
+            --red-primary: #c41e3a;
+            --red-dark: #8b0000;
+            --red-light: #ff4444;
+            --gold-primary: #ffd700;
+            --gold-light: #ffec8b;
+            --gold-dark: #daa520;
+            --white: #fff5e6;
+        }
+
+        /* ========================================
+           BACKGROUND & BODY
+           ======================================== */
+        body {
+            min-height: 100vh;
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, var(--red-dark) 0%, var(--red-primary) 50%, #a01830 100%);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Họa tiết mây trang trí */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(ellipse 80px 40px at 10% 20%, rgba(255,215,0,0.1) 0%, transparent 70%),
+                radial-gradient(ellipse 100px 50px at 90% 30%, rgba(255,215,0,0.1) 0%, transparent 70%),
+                radial-gradient(ellipse 120px 60px at 20% 80%, rgba(255,215,0,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 90px 45px at 80% 70%, rgba(255,215,0,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 70px 35px at 50% 10%, rgba(255,215,0,0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ========================================
+           HEADER
+           ======================================== */
+        .header {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 8vw, 4rem);
+            color: var(--gold-primary);
+            text-shadow: 
+                2px 2px 4px rgba(0,0,0,0.5),
+                0 0 20px rgba(255,215,0,0.5),
+                0 0 40px rgba(255,215,0,0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .header p {
+            color: var(--white);
+            font-size: clamp(0.9rem, 3vw, 1.2rem);
+            margin-top: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 20px rgba(255,215,0,0.5); }
+            to { text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 40px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.5); }
+        }
+
+        /* ========================================
+           KHU VỰC GAME CHÍNH
+           ======================================== */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+            padding: 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Container cây và lì xì */
+        .tree-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        /* Hình ảnh cây mai/đào */
+        .tree-image {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            max-height: 720px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+            /* Ảnh cây mai từ file local */
+        }
+
+        /* ========================================
+           BAO LÌ XÌ (RED ENVELOPE)
+           ======================================== */
+        .li-xi {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            cursor: pointer;
+            transform-origin: top center;
+            animation: swing 3s ease-in-out infinite;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            z-index: 10;
+        }
+
+        /* Dây treo lì xì */
+        .li-xi::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to bottom, var(--gold-dark), var(--gold-primary));
+        }
+
+        /* Thân bao lì xì */
+        .li-xi-body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #ff3333 0%, var(--red-primary) 50%, var(--red-dark) 100%);
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 
+                0 5px 15px rgba(0,0,0,0.3),
+                inset 0 2px 10px rgba(255,255,255,0.2);
+            overflow: hidden;
+        }
+
+        /* Họa tiết vàng trên bao */
+        .li-xi-body::before {
+            content: '福';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: var(--gold-primary);
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+
+        /* Viền vàng */
+        .li-xi-body::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 2px solid var(--gold-primary);
+            border-radius: 5px;
+            opacity: 0.5;
+        }
+
+        /* Nắp bao lì xì */
+        .li-xi-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 25px;
+            background: linear-gradient(to bottom, var(--gold-primary), var(--gold-dark));
+            border-radius: 8px 8px 0 0;
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+        }
+
+        /* Hiệu ứng đung đưa */
+        @keyframes swing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        /* Mỗi bao có delay khác nhau */
+        .li-xi:nth-child(1) { animation-delay: 0s; }
+        .li-xi:nth-child(2) { animation-delay: 0.5s; }
+        .li-xi:nth-child(3) { animation-delay: 1s; }
+        .li-xi:nth-child(4) { animation-delay: 1.5s; }
+        .li-xi:nth-child(5) { animation-delay: 0.3s; }
+        .li-xi:nth-child(6) { animation-delay: 0.8s; }
+        .li-xi:nth-child(7) { animation-delay: 1.3s; }
+        .li-xi:nth-child(8) { animation-delay: 0.6s; }
+
+        /* Hover effect */
+        .li-xi:hover {
+            transform: scale(1.2) rotate(0deg);
+            filter: drop-shadow(0 0 20px rgba(255,215,0,0.8));
+            animation-play-state: paused;
+        }
+
+        /* Hiệu ứng rung khi click */
+        .li-xi.shaking {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            20% { transform: rotate(-20deg); }
+            40% { transform: rotate(20deg); }
+            60% { transform: rotate(-20deg); }
+            80% { transform: rotate(20deg); }
+        }
+
+        /* Ẩn bao đã mở */
+        .li-xi.opened {
+            animation: flyAway 0.8s ease-out forwards;
+        }
+
+        @keyframes flyAway {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0) translateY(-100px); }
+        }
+
+        /* Vị trí các bao lì xì trên cây - điều chỉnh theo hình cây mai */
+        .li-xi:nth-child(1) { top: 8%; left: 35%; }
+        .li-xi:nth-child(2) { top: 5%; left: 55%; }
+        .li-xi:nth-child(3) { top: 18%; left: 75%; }
+        .li-xi:nth-child(4) { top: 22%; left: 15%; }
+        .li-xi:nth-child(5) { top: 35%; left: 50%; }
+        .li-xi:nth-child(6) { top: 28%; left: 80%; }
+        .li-xi:nth-child(7) { top: 42%; left: 25%; }
+        .li-xi:nth-child(8) { top: 48%; left: 68%; }
+
+        /* Responsive vị trí */
+        @media (max-width: 480px) {
+            .li-xi {
+                width: 45px;
+                height: 60px;
+            }
+            .li-xi-body::before {
+                font-size: 1.5rem;
+            }
+            .li-xi-flap {
+                height: 18px;
+            }
+        }
+
+        /* ========================================
+           POPUP / MODAL KẾT QUẢ
+           ======================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: linear-gradient(145deg, #fff8dc, #fffacd);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.5),
+                0 0 0 5px var(--gold-primary),
+                0 0 0 10px var(--red-primary);
+            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .modal h2 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--red-primary);
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .modal .wish-text {
+            font-size: 1.4rem;
+            color: var(--red-dark);
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .modal .money-amount {
+            font-size: 2.5rem;
+            color: var(--gold-dark);
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 40px;
+            height: 40px;
+            background: var(--red-primary);
+            color: white;
+            border: 3px solid var(--gold-primary);
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--red-dark);
+            transform: rotate(90deg);
+        }
+
+        /* ========================================
+           NÚT CHƠI LẠI
+           ======================================== */
+        .btn-reset {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+            background: linear-gradient(145deg, var(--red-primary), var(--red-dark));
+            border: 3px solid var(--gold-primary);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-reset::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-reset:hover::before {
+            left: 100%;
+        }
+
+        .btn-reset:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255,215,0,0.4);
+        }
+
+        .btn-reset:active {
+            transform: translateY(0);
+        }
+
+        /* Nút bật/tắt nhạc */
+        .btn-music {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(145deg, var(--gold-primary), var(--gold-dark));
+            border: none;
+            border-radius: 50%;
+            color: var(--red-dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .btn-music:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-music.muted i::before {
+            content: '\f6a9'; /* volume-mute icon */
+        }
+
+        /* ========================================
+           HIỆU ỨNG HOA RƠI (Canvas)
+           ======================================== */
+        #petalCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ========================================
+           HIỆU ỨNG PHÁO HOA (Confetti)
+           ======================================== */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+
+        /* ========================================
+           THÔNG TIN GAME
+           ======================================== */
+        .game-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            padding: 15px 20px;
+            border-radius: 15px;
+            color: var(--gold-primary);
+            font-weight: 700;
+            z-index: 50;
+            border: 2px solid var(--gold-primary);
+        }
+
+        .game-info span {
+            color: white;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 768px) {
+            .tree-container {
+                height: 400px;
+            }
+            
+            .tree-image {
+                max-width: 300px;
+            }
+            
+            .game-info {
+                top: auto;
+                bottom: 80px;
+                right: 10px;
+                left: 10px;
+                text-align: center;
+            }
+            
+            .btn-music {
+                bottom: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px 10px;
+            }
+            
+            .tree-container {
+                height: 350px;
+            }
+            
+            .modal {
+                padding: 20px;
+            }
+            
+            .modal h2 {
+                font-size: 1.5rem;
+            }
+            
+            .modal .money-amount {
+                font-size: 2rem;
+            }
+            
+            .btn-reset {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
+
+        /* ========================================
+           TRANG TRÍ THÊM
+           ======================================== */
+        .lantern {
+            position: fixed;
+            top: 0;
+            width: 40px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--red-primary), var(--red-dark));
+            border-radius: 50%;
+            animation: lanternSwing 4s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        .lantern::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 15px;
+            background: var(--gold-dark);
+        }
+
+        .lantern::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 20px;
+            background: var(--gold-primary);
+            border-radius: 0 0 2px 2px;
+        }
+
+        .lantern:nth-child(1) { left: 5%; animation-delay: 0s; }
+        .lantern:nth-child(2) { right: 5%; animation-delay: 1s; }
+
+        @keyframes lanternSwing {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        @media (max-width: 480px) {
+            .lantern {
+                width: 30px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========================================
+         CANVAS HOA RƠI
+         ======================================== -->
+    <canvas id="petalCanvas"></canvas>
+    
+    <!-- ========================================
+         ĐÈN LỒNG TRANG TRÍ
+         ======================================== -->
+    <div class="lantern"></div>
+    <div class="lantern"></div>
+    
+    <!-- ========================================
+         HEADER
+         ======================================== -->
+    <header class="header">
+        <h1>🧧 Hái Lộc Đầu Năm 🧧</h1>
+        <p>Chọn một bao lì xì để nhận lộc may mắn!</p>
+    </header>
+    
+    <!-- ========================================
+         THÔNG TIN GAME
+         ======================================== -->
+    <div class="game-info">
+        <i class="fas fa-gift"></i> Còn lại: <span id="envelopeCount">8</span> bao
+    </div>
+    
+    <!-- ========================================
+         KHU VỰC GAME CHÍNH
+         ======================================== -->
+    <main class="game-container">
+        <div class="tree-container">
+            <!-- 🌸 HÌNH ẢNH CÂY MAI - Đã sử dụng ảnh local -->
+            <img src="pngtree-removebg-preview.png" 
+                 alt="Cây Mai Tết" 
+                 class="tree-image">
+            
+            <!-- 
+                🧧 CÁC BAO LÌ XÌ
+                Được tạo động bằng JavaScript
+            -->
+            <div id="liXiContainer"></div>
+        </div>
+        
+        <!-- Nút chơi lại -->
+        <button class="btn-reset" onclick="resetGame()">
+            <i class="fas fa-redo"></i> Chơi Lại
+        </button>
+    </main>
+    
+    <!-- ========================================
+         POPUP KẾT QUẢ
+         ======================================== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon">🧧</div>
+            <h2>Chúc Mừng Năm Mới!</h2>
+            <p class="wish-text" id="wishText">Lời chúc sẽ hiện ở đây</p>
+            <p class="money-amount" id="moneyAmount">0đ</p>
+            <p style="color: #666; font-size: 0.9rem;">
+                <i class="fas fa-star" style="color: gold;"></i>
+                Chúc bạn một năm mới an khang thịnh vượng!
+            </p>
+        </div>
+    </div>
+    
+    <!-- ========================================
+         CONTAINER PHÁO HOA
+         ======================================== -->
+    <div class="confetti-container" id="confettiContainer"></div>
+    
+    <!-- ========================================
+         NHẠC NỀN
+         🎵 Thay link nhạc bên dưới bằng file mp3 của bạn
+         ======================================== -->
+    <audio id="bgMusic" loop preload="auto">
+        <!-- Thay YOUR_MUSIC_URL bằng link nhạc Tết -->
+        <source src="YOUR_MUSIC_URL.mp3" type="audio/mpeg">
+        <!-- Hoặc dùng link online -->
+        <!-- <source src="https://example.com/nhac-tet.mp3" type="audio/mpeg"> -->
+    </audio>
+    
+    <!-- Nút bật/tắt nhạc -->
+    <button class="btn-music" id="btnMusic" onclick="toggleMusic()">
+        <i class="fas fa-volume-up"></i>
+    </button>
+    
+    <!-- ========================================
+         JAVASCRIPT
+         ======================================== -->
+    <script>
+        // ========================================
+        // CẤU HÌNH GAME
+        // ========================================
+        
+        /**
+         * 📝 DANH SÁCH LỜI CHÚC TẾT
+         * Bạn có thể thêm/sửa/xóa các lời chúc tại đây
+         */
+        const WISHES = [
+            "Tiền vào như nước 💰",
+            "Vạn sự như ý 🌟",
+            "An khang thịnh vượng 🏠",
+            "Phát tài phát lộc 💎",
+            "Sức khỏe dồi dào 💪",
+            "Công thành danh toại 🎯",
+            "Tấn tài tấn lộc 📈",
+            "Năm mới hạnh phúc 🎊",
+            "Kim ngân đầy túi 👛",
+            "Mã đáo thành công 🐎",
+            "Phúc lộc song toàn 🍀",
+            "Xuân sang giàu sang 🌸"
+        ];
+        
+        /**
+         * 💰 DANH SÁCH SỐ TIỀN MAY MẮN
+         * Bạn có thể thêm/sửa/xóa các mức tiền tại đây
+         */
+        const MONEY_AMOUNTS = [
+            50000,
+            88000,
+            100000,
+            168000,
+            200000,
+            288000,
+            500000,
+            888000,
+            999000,
+            1000000
+        ];
+        
+        // Số lượng bao lì xì
+        const TOTAL_ENVELOPES = 8;
+        
+        // Biến theo dõi trạng thái
+        let remainingEnvelopes = TOTAL_ENVELOPES;
+        let isMusicPlaying = false;
+        
+        // ========================================
+        // KHỞI TẠO GAME
+        // ========================================
+        
+        /**
+         * Khởi tạo các bao lì xì trên cây
+         */
+        function initEnvelopes() {
+            const container = document.getElementById('liXiContainer');
+            container.innerHTML = '';
+            
+            // Vị trí các bao lì xì (% từ góc trên bên trái) - đã điều chỉnh theo cây mai
+            const positions = [
+                { top: 8, left: 35 },
+                { top: 5, left: 55 },
+                { top: 18, left: 75 },
+                { top: 22, left: 15 },
+                { top: 35, left: 50 },
+                { top: 28, left: 80 },
+                { top: 42, left: 25 },
+                { top: 48, left: 68 }
+            ];
+            
+            for (let i = 0; i < TOTAL_ENVELOPES; i++) {
+                const liXi = document.createElement('div');
+                liXi.className = 'li-xi';
+                liXi.id = `lixi-${i}`;
+                liXi.style.top = `${positions[i].top}%`;
+                liXi.style.left = `${positions[i].left}%`;
+                liXi.onclick = () => openEnvelope(i);
+                
+                liXi.innerHTML = `
+                    <div class="li-xi-flap"></div>
+                    <div class="li-xi-body"></div>
+                `;
+                
+                container.appendChild(liXi);
+            }
+            
+            remainingEnvelopes = TOTAL_ENVELOPES;
+            updateEnvelopeCount();
+        }
+        
+        /**
+         * Cập nhật số bao còn lại
+         */
+        function updateEnvelopeCount() {
+            document.getElementById('envelopeCount').textContent = remainingEnvelopes;
+        }
+        
+        // ========================================
+        // XỬ LÝ MỞ BAO LÌ XÌ
+        // ========================================
+        
+        /**
+         * Xử lý khi người dùng click vào bao lì xì
+         * @param {number} index - Chỉ số bao lì xì
+         */
+        function openEnvelope(index) {
+            const envelope = document.getElementById(`lixi-${index}`);
+            
+            // Kiểm tra nếu bao đã mở
+            if (envelope.classList.contains('opened') || envelope.classList.contains('shaking')) {
+                return;
+            }
+            
+            // Thêm hiệu ứng rung
+            envelope.classList.add('shaking');
+            
+            // Sau khi rung xong, mở bao
+            setTimeout(() => {
+                envelope.classList.remove('shaking');
+                envelope.classList.add('opened');
+                
+                // Giảm số bao còn lại
+                remainingEnvelopes--;
+                updateEnvelopeCount();
+                
+                // Lấy ngẫu nhiên lời chúc và số tiền
+                const wish = WISHES[Math.floor(Math.random() * WISHES.length)];
+                const money = MONEY_AMOUNTS[Math.floor(Math.random() * MONEY_AMOUNTS.length)];
+                
+                // Hiển thị popup
+                showModal(wish, money);
+                
+                // Bắn pháo hoa
+                launchConfetti();
+            }, 500);
+        }
+        
+        // ========================================
+        // POPUP / MODAL
+        // ========================================
+        
+        /**
+         * Hiển thị popup kết quả
+         * @param {string} wish - Lời chúc
+         * @param {number} money - Số tiền may mắn
+         */
+        function showModal(wish, money) {
+            document.getElementById('wishText').textContent = wish;
+            document.getElementById('moneyAmount').textContent = formatMoney(money);
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+        
+        /**
+         * Đóng popup
+         */
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+        
+        /**
+         * Format số tiền thành chuỗi VND
+         * @param {number} amount - Số tiền
+         * @returns {string} - Chuỗi tiền đã format
+         */
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+        
+        // Click bên ngoài để đóng modal
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // ========================================
+        // HIỆU ỨNG PHÁO HOA (CONFETTI)
+        // ========================================
+        
+        /**
+         * Bắn pháo hoa confetti
+         */
+        function launchConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#00bfff', '#ff8c00'];
+            const shapes = ['square', 'circle', 'triangle'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.backgroundColor = color;
+                confetti.style.opacity = '1';
+                
+                // Tạo hình dạng
+                if (shape === 'circle') {
+                    confetti.style.borderRadius = '50%';
+                } else if (shape === 'triangle') {
+                    confetti.style.width = '0';
+                    confetti.style.height = '0';
+                    confetti.style.backgroundColor = 'transparent';
+                    confetti.style.borderLeft = '5px solid transparent';
+                    confetti.style.borderRight = '5px solid transparent';
+                    confetti.style.borderBottom = `10px solid ${color}`;
+                }
+                
+                container.appendChild(confetti);
+                
+                // Animation rơi
+                const duration = 2 + Math.random() * 2;
+                const xMove = (Math.random() - 0.5) * 200;
+                const rotation = Math.random() * 720;
+                
+                confetti.animate([
+                    { 
+                        transform: 'translateY(0) translateX(0) rotate(0deg)',
+                        opacity: 1
+                    },
+                    { 
+                        transform: `translateY(${window.innerHeight + 100}px) translateX(${xMove}px) rotate(${rotation}deg)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+                
+                // Xóa confetti sau khi animation xong
+                setTimeout(() => {
+                    confetti.remove();
+                }, duration * 1000);
+            }
+        }
+        
+        // ========================================
+        // HIỆU ỨNG HOA RƠI (CANVAS)
+        // ========================================
+        
+        const canvas = document.getElementById('petalCanvas');
+        const ctx = canvas.getContext('2d');
+        let petals = [];
+        
+        /**
+         * Thiết lập kích thước canvas
+         */
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        /**
+         * Class cánh hoa
+         */
+        class Petal {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -20;
+                this.size = Math.random() * 8 + 5;
+                this.speedY = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 3 - 1.5;
+                this.opacity = Math.random() * 0.5 + 0.5;
+                
+                // Màu hoa mai (vàng) hoặc hoa đào (hồng)
+                this.color = Math.random() > 0.5 ? 
+                    `rgba(255, ${200 + Math.random() * 55}, ${50 + Math.random() * 50}, ${this.opacity})` :
+                    `rgba(255, ${150 + Math.random() * 50}, ${180 + Math.random() * 50}, ${this.opacity})`;
+            }
+            
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX + Math.sin(this.y / 50) * 0.5;
+                this.rotation += this.rotationSpeed;
+                
+                if (this.y > canvas.height + 20) {
+                    this.reset();
+                }
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                
+                // Vẽ cánh hoa
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                
+                // Hình cánh hoa 5 cánh
+                for (let i = 0; i < 5; i++) {
+                    ctx.ellipse(0, -this.size/2, this.size/3, this.size/2, (i * 72) * Math.PI / 180, 0, Math.PI * 2);
+                }
+                ctx.fill();
+                
+                // Nhụy hoa
+                ctx.beginPath();
+                ctx.fillStyle = 'rgba(255, 215, 0, 0.8)';
+                ctx.arc(0, 0, this.size/5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        }
+        
+        /**
+         * Khởi tạo các cánh hoa
+         */
+        function initPetals() {
+            petals = [];
+            const petalCount = Math.min(50, Math.floor(canvas.width / 20));
+            
+            for (let i = 0; i < petalCount; i++) {
+                const petal = new Petal();
+                petal.y = Math.random() * canvas.height;
+                petals.push(petal);
+            }
+        }
+        
+        /**
+         * Vòng lặp animation hoa rơi
+         */
+        function animatePetals() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            petals.forEach(petal => {
+                petal.update();
+                petal.draw();
+            });
+            
+            requestAnimationFrame(animatePetals);
+        }
+        
+        // ========================================
+        // ĐIỀU KHIỂN NHẠC
+        // ========================================
+        
+        /**
+         * Bật/tắt nhạc nền
+         */
+        function toggleMusic() {
+            const audio = document.getElementById('bgMusic');
+            const btn = document.getElementById('btnMusic');
+            
+            if (isMusicPlaying) {
+                audio.pause();
+                btn.classList.add('muted');
+                btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                audio.play().catch(e => {
+                    console.log('Không thể phát nhạc:', e);
+                });
+                btn.classList.remove('muted');
+                btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+            
+            isMusicPlaying = !isMusicPlaying;
+        }
+        
+        // ========================================
+        // RESET GAME
+        // ========================================
+        
+        /**
+         * Chơi lại từ đầu
+         */
+        function resetGame() {
+            closeModal();
+            initEnvelopes();
+        }
+        
+        // ========================================
+        // KHỞI ĐỘNG
+        // ========================================
+        
+        // Khi trang tải xong
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            initPetals();
+            animatePetals();
+            initEnvelopes();
+        });
+        
+        // Khi thay đổi kích thước màn hình
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initPetals();
+        });
+        
+        // Phím tắt ESC để đóng modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
